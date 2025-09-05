@@ -1,0 +1,10 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "database": "${workspaceFolder:ganjoor-django}/db.sqlite3",
+            "name": "ganjoor-django"
+        }
+    ]
+}
