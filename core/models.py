@@ -1,109 +1,124 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.db.models import Q
 
 
 class GanjoorPoet(models.Model):
-    """Poet"""
-
-    id = models.AutoField(primary_key=True, db_column="id")
-    name = models.CharField("نام شاعر", max_length=255, db_column="name")
-    bio = models.TextField("زندگینامه یا توضیحات", blank=True, db_column="description")
-
-    class Meta:
-        db_table = "poet"
-        verbose_name = "Poet"
-        verbose_name_plural = "Poets"
+    name = models.CharField(max_length=255, db_index=True)
+    bio = models.TextField(blank=True)
+    birth_year = models.IntegerField(blank=True, null=True)
+    death_year = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         return self.name
 
 
 class GanjoorCat(models.Model):
-    """Category/Section"""
-
-    id = models.AutoField(primary_key=True, db_column="id")
     poet = models.ForeignKey(
-        GanjoorPoet,
-        on_delete=models.CASCADE,
-        related_name="categories",
-        db_column="poet_id",
-        help_text="شاعر مرتبط",
+        GanjoorPoet, on_delete=models.CASCADE, related_name="categories"
     )
-    text = models.CharField("عنوان بخش", max_length=255, db_column="text")
+    text = models.CharField(max_length=255)
     parent = models.ForeignKey(
-        "self",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        db_column="parent_id",
-        related_name="children",
-        help_text="بخش والد",
+        "self", null=True, blank=True, on_delete=models.CASCADE, related_name="children"
     )
-    url = models.URLField("نشانی بخش", max_length=500, db_column="url")
-
-    class Meta:
-        db_table = "cat"
-        verbose_name = "Category"
-        verbose_name_plural = "Categories"
+    url = models.URLField(max_length=500, unique=True)
+    start_poem = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.text
 
 
 class GanjoorPoem(models.Model):
-    """Poem"""
-
-    id = models.AutoField(primary_key=True, db_column="id")
-    cat = models.ForeignKey(
-        GanjoorCat,
-        on_delete=models.CASCADE,
-        related_name="poems",
-        db_column="cat_id",
-        help_text="بخشی که شعر به آن تعلق دارد",
+    poet = models.ForeignKey(
+        GanjoorPoet, related_name="poems", on_delete=models.CASCADE
     )
-    title = models.CharField("عنوان شعر", max_length=255, db_column="title")
-    url = models.URLField("نشانی شعر", max_length=500, db_column="url")
+    category = models.ForeignKey(
+        GanjoorCat, on_delete=models.CASCADE, related_name="poems"
+    )
+    text = models.TextField()
+    has_comments = models.BooleanField(default=False)
+    gdb_id = models.IntegerField(blank=True, null=True)  # For imported DBs
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    title = models.CharField(max_length=255)
+    url = models.URLField(max_length=500, unique=True)
+    highlight_text = models.TextField(blank=True, null=True)
 
-    class Meta:
-        db_table = "poem"
-        verbose_name = "Poem"
-        verbose_name_plural = "Poems"
+    # Many-to-Many through favorites
+    favorited_by = models.ManyToManyField(
+        User, through="GanjoorFavorite", related_name="favorite_poems"
+    )
 
     def __str__(self):
         return self.title
 
 
 class VersePosition(models.IntegerChoices):
-    RIGHT = 0, "Right (مصرع اول)"
-    LEFT = 1, "Left (مصرع دوم)"
-    CENTERED_VERSE1 = 2, "Centered Verse 1 (مصرع اول/تنها)"
-    CENTERED_VERSE2 = 3, "Centered Verse 2 (مصرع دوم)"
-    SINGLE = 4, "Single (مصرع آزاد/نیمایی)"
-    COMMENT = 5, "Comment (توضیح)"
-    PARAGRAPH = -1, "Paragraph (نثر)"
+    RIGHT = 0, "Right (first hemistich)"
+    LEFT = 1, "Left (second hemistich)"
+    CENTERED1 = 2, "Centered verse part 1"
+    CENTERED2 = 3, "Centered verse part 2"
+    SINGLE = 4, "Single line"
+    COMMENT = 5, "Comment"
+    PARAGRAPH = -1, "Paragraph"
 
 
 class GanjoorVerse(models.Model):
-    """Verse"""
-
-    id = models.AutoField(primary_key=True, db_column="id")
     poem = models.ForeignKey(
-        GanjoorPoem,
-        on_delete=models.CASCADE,
-        related_name="verses",
-        db_column="poem_id",
-        help_text="شعر مرتبط",
+        GanjoorPoem, on_delete=models.CASCADE, related_name="verses"
     )
-    vorder = models.PositiveIntegerField("ترتیب مصرع", db_column="vorder")
+    order = models.PositiveIntegerField()
     position = models.IntegerField(
-        "نوع و جایگاه مصرع", choices=VersePosition.choices, db_column="position"
+        choices=VersePosition.choices, default=VersePosition.RIGHT
     )
-    text = models.TextField("متن مصرع", db_column="text")
+    text = models.TextField()
 
     class Meta:
-        db_table = "verse"
-        verbose_name = "Verse"
-        verbose_name_plural = "Verses"
-        unique_together = ("poem", "vorder")
+        ordering = ["order"]
 
     def __str__(self):
-        return self.text
+        return self.text[:50]
+
+
+class GanjoorFavorite(models.Model):
+    user = models.ForeignKey(User, related_name="favorites", on_delete=models.CASCADE)
+    poem = models.ForeignKey(GanjoorPoem, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("user", "poem")
+
+
+class GanjoorPoemAudio(models.Model):
+    poem = models.ForeignKey(
+        GanjoorPoem, related_name="audio_files", on_delete=models.CASCADE
+    )
+    file = models.FileField(upload_to="poem_audio/")
+    narrator = models.CharField(max_length=255, blank=True, null=True)
+    duration_seconds = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return f"Audio for {self.poem.title}"
+
+
+class UserSetting(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    view_mode = models.CharField(max_length=50, default="centered")  # centered / normal
+    font_size = models.FloatField(default=16)
+    show_line_numbers = models.BooleanField(default=True)
+    last_highlight = models.CharField(max_length=255, blank=True, null=True)
+    browse_button_visible = models.BooleanField(default=True)
+    comments_button_visible = models.BooleanField(default=True)
+    copy_button_visible = models.BooleanField(default=True)
+    print_button_visible = models.BooleanField(default=True)
+    home_button_visible = models.BooleanField(default=True)
+    random_button_visible = models.BooleanField(default=True)
+    editor_button_visible = models.BooleanField(default=True)
+    download_button_visible = models.BooleanField(default=True)
+
+
+def search_poems(query: str, poet_id: int = None):
+    poems = GanjoorPoem.objects.all()
+    if poet_id:
+        poems = poems.filter(poet_id=poet_id)
+    return poems.filter(Q(title__icontains=query) | Q(text__icontains=query))
