@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Ganjoor Poetry{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    {% block head %}{% endblock %}
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'core:home' %}">Ganjoor</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link" href="{% url 'core:favorites' %}">My Favorites</a></li>
+            </ul>
+            <span class="navbar-text">
+                {% if user.is_authenticated %}
+                    Hello, {{ user.username }}!
+                {% else %}
+                    <a class="btn btn-outline-light btn-sm" href="/admin/login/">Login</a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>
