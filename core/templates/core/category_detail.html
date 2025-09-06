@@ -1,0 +1,15 @@
+{% extends "core/base.html" %}
+{% block title %}{{ category.title }} - Ganjoor{% endblock %}
+{% block content %}
+    <h1>{{ category.title }}</h1>
+    <h3>Poems</h3>
+    <ul class="list-group">
+        {% for poem in poems %}
+            <li class="list-group-item">
+                <a href="{% url 'core:poem_detail' poem.pk %}">{{ poem.title }}</a>
+            </li>
+        {% empty %}
+            <li class="list-group-item">No poems found.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

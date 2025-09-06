@@ -1,111 +1,92 @@
-from rest_framework import filters
-from django_filters.rest_framework import DjangoFilterBackend
-
-from rest_framework import viewsets, permissions, status
-from rest_framework.decorators import action
-from rest_framework.response import Response
+from rest_framework import viewsets, permissions
+from django.shortcuts import render, get_object_or_404
 from .models import (
     GanjoorPoet,
+    GanjoorCategory,
     GanjoorPoem,
+    GanjoorVerse,
     GanjoorFavorite,
     GanjoorPoemAudio,
+    GanjoorAudioSync,
     UserSetting,
-    GanjoorVerse,
-    GanjoorCat,
 )
 from .serializers import (
     GanjoorPoetSerializer,
+    GanjoorCategorySerializer,
     GanjoorPoemSerializer,
-    GanjoorCatSerializer,
-    GanjoorFavoriteSerializer,
     GanjoorVerseSerializer,
+    GanjoorFavoriteSerializer,
     GanjoorPoemAudioSerializer,
+    GanjoorAudioSyncSerializer,
     UserSettingSerializer,
 )
-from django.shortcuts import get_object_or_404
-import random
 
+# --- API ViewSets ---
 
-class GanjoorCatViewSet(viewsets.ModelViewSet):
-    queryset = GanjoorCat.objects.all()
-    serializer_class = GanjoorCatSerializer
-
-
-class GanjoorVerseViewSet(viewsets.ModelViewSet):
-    queryset = GanjoorVerse.objects.all()
-    serializer_class = GanjoorVerseSerializer
-    filter_backends = [filters.SearchFilter]
-    search_fields = ["text"]
-
-
-# -------------------
-# Poet ViewSet
-# -------------------
-class GanjoorPoetViewSet(viewsets.ReadOnlyModelViewSet):
+class GanjoorPoetViewSet(viewsets.ModelViewSet):
     queryset = GanjoorPoet.objects.all()
     serializer_class = GanjoorPoetSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
+class GanjoorCategoryViewSet(viewsets.ModelViewSet):
+    queryset = GanjoorCategory.objects.all()
+    serializer_class = GanjoorCategorySerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-# -------------------
-# Poem ViewSet
-# -------------------
-class GanjoorPoemViewSet(viewsets.ReadOnlyModelViewSet):
+class GanjoorPoemViewSet(viewsets.ModelViewSet):
     queryset = GanjoorPoem.objects.all()
     serializer_class = GanjoorPoemSerializer
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ["category", "category__poet"]
-    search_fields = ["title", "slug"]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    @action(detail=False, methods=["get"])
-    def random(self, request):
-        poems = list(GanjoorPoem.objects.all())
-        if poems:
-            poem = random.choice(poems)
-            serializer = self.get_serializer(poem)
-            return Response(serializer.data)
-        return Response(
-            {"detail": "No poems available."}, status=status.HTTP_404_NOT_FOUND
-        )
-
-
-# -------------------
-# Favorite ViewSet
-# -------------------
 class GanjoorFavoriteViewSet(viewsets.ModelViewSet):
     queryset = GanjoorFavorite.objects.all()
     serializer_class = GanjoorFavoriteSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    def get_queryset(self):
-        return GanjoorFavorite.objects.filter(user=self.request.user)
+class GanjoorVerseViewSet(viewsets.ModelViewSet):
+    queryset = GanjoorVerse.objects.all()
+    serializer_class = GanjoorVerseSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
-
-# -------------------
-# PoemAudio ViewSet
-# -------------------
-class GanjoorPoemAudioViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = GanjoorPoemAudioSerializer
+class GanjoorPoemAudioViewSet(viewsets.ModelViewSet):
     queryset = GanjoorPoemAudio.objects.all()
+    serializer_class = GanjoorPoemAudioSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    @action(detail=True, methods=["get"])
-    def stream(self, request, pk=None):
-        poem_audio = get_object_or_404(GanjoorPoemAudio, pk=pk)
-        file_handle = poem_audio.file.open("rb")
-        response = Response(file_handle.read(), content_type="audio/mpeg")
-        response["Content-Disposition"] = f'inline; filename="{poem_audio.file.name}"'
-        return response
+class GanjoorAudioSyncViewSet(viewsets.ModelViewSet):
+    queryset = GanjoorAudioSync.objects.all()
+    serializer_class = GanjoorAudioSyncSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-
-# -------------------
-# User Setting ViewSet
-# -------------------
 class UserSettingViewSet(viewsets.ModelViewSet):
+    queryset = UserSetting.objects.all()
     serializer_class = UserSettingSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    def get_object(self):
-        setting, created = UserSetting.objects.get_or_create(user=self.request.user)
-        return setting
+# --- Web (HTML) Views ---
+
+def home(request):
+    poets = GanjoorPoet.objects.all()
+    return render(request, "core/home.html", {"poets": poets})
+
+def poet_detail(request, pk):
+    poet = get_object_or_404(GanjoorPoet, pk=pk)
+    categories = poet.categories.all()
+    return render(request, "core/poet_detail.html", {"poet": poet, "categories": categories})
+
+def category_detail(request, pk):
+    category = get_object_or_404(GanjoorCategory, pk=pk)
+    poems = category.poems.all()
+    return render(request, "core/category_detail.html", {"category": category, "poems": poems})
+
+def poem_detail(request, pk):
+    poem = get_object_or_404(GanjoorPoem, pk=pk)
+    verses = poem.verses.all()
+    return render(request, "core/poem_detail.html", {"poem": poem, "verses": verses})
+
+def favorites(request):
+    if request.user.is_authenticated:
+        favs = request.user.ganjoor_favorites.select_related('poem').all()
+    else:
+        favs = []
+    return render(request, "core/favorites.html", {"favorites": favs})
