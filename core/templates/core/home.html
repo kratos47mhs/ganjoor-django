@@ -9,7 +9,7 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ poet.name }}</h5>
                         <p class="card-text">{{ poet.description|truncatewords:30 }}</p>
-                        <a href="{% url 'core:poet_detail' poet.pk %}" class="btn btn-primary btn-sm">View Poet</a>
+                        <a href="{% url 'core:poet_detail' poet.pk %}" class="btn btn-primary btn-sm">Browse</a>
                     </div>
                 </div>
             </div>

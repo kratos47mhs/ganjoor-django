@@ -1,15 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import (
-    GanjoorAudioSyncViewSet,
-    GanjoorCategoryViewSet,
-    GanjoorFavoriteViewSet,
-    GanjoorPoemAudioViewSet,
-    GanjoorPoemViewSet,
-    GanjoorPoetViewSet,
-    GanjoorVerseViewSet,
-    UserSettingViewSet,
-)
+
+from .views import GanjoorPoetViewSet, GanjoorCategoryViewSet, GanjoorPoemViewSet, GanjoorVerseViewSet, GanjoorFavoriteViewSet, GanjoorPoemAudioViewSet, GanjoorAudioSyncViewSet, UserSettingViewSet
 
 router = DefaultRouter()
 router.register(r"poets", GanjoorPoetViewSet)

@@ -1,19 +1,21 @@
 {% extends "core/base.html" %}
 {% block title %}{{ poem.title }} - Ganjoor{% endblock %}
 {% block content %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'core:poet_detail' poem.category.poet.pk %}">{{ poem.category.poet.name }}</a></li>
+            {% for crumb in breadcrumbs %}
+                <li class="breadcrumb-item"><a href="{% url 'core:category_detail' crumb.pk %}">{{ crumb.title }}</a></li>
+            {% endfor %}
+            <li class="breadcrumb-item active" aria-current="page">{{ poem.title }}</li>
+        </ol>
+    </nav>
     <h1>{{ poem.title }}</h1>
-    {% if request.user.is_authenticated %}
-        <form method="post" action="">
-            {% csrf_token %}
-            <button class="btn btn-outline-success btn-sm mb-2">Add to Favorites</button>
-        </form>
-    {% endif %}
     <h3>Verses</h3>
     <ol>
         {% for verse in verses %}
-            <li>
-                <span style="font-size:1.2em">{{ verse.text }}</span>
-            </li>
+            <li><span style="font-size:1.2em">{{ verse.text }}</span></li>
         {% empty %}
             <li>No verses found.</li>
         {% endfor %}
