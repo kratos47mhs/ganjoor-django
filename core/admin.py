@@ -1,44 +1,35 @@
 from django.contrib import admin
 from .models import (
-    GanjoorPoet,
-    GanjoorCategory,
-    GanjoorPoem,
-    GanjoorVerse,
-    GanjoorFavorite,
-    GanjoorPoemAudio,
-    GanjoorAudioSync,
-    UserSetting,
-    Gil,
-    Gver,
+    GanjoorPoet, GanjoorCategory, GanjoorPoem, GanjoorVerse,
+    GanjoorFavorite, GanjoorPoemAudio, GanjoorAudioSync, UserSetting
 )
 
 @admin.register(GanjoorPoet)
 class GanjoorPoetAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category')
+    list_display = ('name',)
     search_fields = ('name',)
-    list_filter = ('category',)
 
 @admin.register(GanjoorCategory)
 class GanjoorCategoryAdmin(admin.ModelAdmin):
-    list_display = ('title', 'poet', 'parent', 'url')
-    search_fields = ('title', 'url')
-    list_filter = ('poet', 'parent')
+    list_display = ('title', 'poet', 'parent')
+    search_fields = ('title',)
+    list_filter = ('poet',)
 
 @admin.register(GanjoorPoem)
 class GanjoorPoemAdmin(admin.ModelAdmin):
-    list_display = ('title', 'category', 'url')
+    list_display = ('title', 'category')
     search_fields = ('title',)
     list_filter = ('category',)
 
 @admin.register(GanjoorVerse)
 class GanjoorVerseAdmin(admin.ModelAdmin):
-    list_display = ('poem', 'order', 'position')
+    list_display = ('poem', 'order')
     search_fields = ('poem__title', 'text')
     list_filter = ('poem',)
 
 @admin.register(GanjoorFavorite)
 class GanjoorFavoriteAdmin(admin.ModelAdmin):
-    list_display = ('user', 'poem', 'verse', 'verse_position', 'created_at')
+    list_display = ('user', 'poem', 'verse', 'created_at')
     search_fields = ('user__username', 'poem__title')
     list_filter = ('user', 'poem')
 
@@ -57,11 +48,3 @@ class GanjoorAudioSyncAdmin(admin.ModelAdmin):
 class UserSettingAdmin(admin.ModelAdmin):
     list_display = ('user', 'view_mode', 'font_size', 'show_line_numbers')
     search_fields = ('user__username',)
-
-@admin.register(Gil)
-class GilAdmin(admin.ModelAdmin):
-    list_display = ('id', 'category')
-
-@admin.register(Gver)
-class GverAdmin(admin.ModelAdmin):
-    list_display = ('id', 'current_version')

@@ -1,86 +1,67 @@
-from rest_framework import viewsets, permissions
-from django.shortcuts import render, get_object_or_404
-from .models import (
-    GanjoorPoet,
-    GanjoorCategory,
-    GanjoorPoem,
-    GanjoorVerse,
-    GanjoorFavorite,
-    GanjoorPoemAudio,
-    GanjoorAudioSync,
-    UserSetting,
-)
-from .serializers import (
-    GanjoorPoetSerializer,
-    GanjoorCategorySerializer,
-    GanjoorPoemSerializer,
-    GanjoorVerseSerializer,
-    GanjoorFavoriteSerializer,
-    GanjoorPoemAudioSerializer,
-    GanjoorAudioSyncSerializer,
-    UserSettingSerializer,
-)
+from django.shortcuts import get_object_or_404, render
+from rest_framework import permissions, viewsets
 
-# --- API ViewSets ---
+from . import serializers
 
+
+# API endpoints
 class GanjoorPoetViewSet(viewsets.ModelViewSet):
-    queryset = GanjoorPoet.objects.all()
-    serializer_class = GanjoorPoetSerializer
+    queryset = serializers.GanjoorPoet.objects.all()
+    serializer_class = serializers.GanjoorPoetSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 class GanjoorCategoryViewSet(viewsets.ModelViewSet):
-    queryset = GanjoorCategory.objects.all()
-    serializer_class = GanjoorCategorySerializer
+    queryset = serializers.GanjoorCategory.objects.all()
+    serializer_class = serializers.GanjoorCategorySerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 class GanjoorPoemViewSet(viewsets.ModelViewSet):
-    queryset = GanjoorPoem.objects.all()
-    serializer_class = GanjoorPoemSerializer
+    queryset = serializers.GanjoorPoem.objects.all()
+    serializer_class = serializers.GanjoorPoemSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 class GanjoorFavoriteViewSet(viewsets.ModelViewSet):
-    queryset = GanjoorFavorite.objects.all()
-    serializer_class = GanjoorFavoriteSerializer
+    queryset = serializers.GanjoorFavorite.objects.all()
+    serializer_class = serializers.GanjoorFavoriteSerializer
     permission_classes = [permissions.IsAuthenticated]
 
 class GanjoorVerseViewSet(viewsets.ModelViewSet):
-    queryset = GanjoorVerse.objects.all()
-    serializer_class = GanjoorVerseSerializer
+    queryset = serializers.GanjoorVerse.objects.all()
+    serializer_class = serializers.GanjoorVerseSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 class GanjoorPoemAudioViewSet(viewsets.ModelViewSet):
-    queryset = GanjoorPoemAudio.objects.all()
-    serializer_class = GanjoorPoemAudioSerializer
+    queryset = serializers.GanjoorPoemAudio.objects.all()
+    serializer_class = serializers.GanjoorPoemAudioSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 class GanjoorAudioSyncViewSet(viewsets.ModelViewSet):
-    queryset = GanjoorAudioSync.objects.all()
-    serializer_class = GanjoorAudioSyncSerializer
+    queryset = serializers.GanjoorAudioSync.objects.all()
+    serializer_class = serializers.GanjoorAudioSyncSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 class UserSettingViewSet(viewsets.ModelViewSet):
-    queryset = UserSetting.objects.all()
-    serializer_class = UserSettingSerializer
+    queryset = serializers.UserSetting.objects.all()
+    serializer_class = serializers.UserSettingSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-# --- Web (HTML) Views ---
-
+# Web frontend views
 def home(request):
-    poets = GanjoorPoet.objects.all()
+    poets = serializers.GanjoorPoet.objects.all()
     return render(request, "core/home.html", {"poets": poets})
 
 def poet_detail(request, pk):
-    poet = get_object_or_404(GanjoorPoet, pk=pk)
+    poet = get_object_or_404(serializers.GanjoorPoet, pk=pk)
     categories = poet.categories.all()
     return render(request, "core/poet_detail.html", {"poet": poet, "categories": categories})
 
 def category_detail(request, pk):
-    category = get_object_or_404(GanjoorCategory, pk=pk)
+    category = get_object_or_404(serializers.GanjoorCategory, pk=pk)
     poems = category.poems.all()
     return render(request, "core/category_detail.html", {"category": category, "poems": poems})
 
 def poem_detail(request, pk):
-    poem = get_object_or_404(GanjoorPoem, pk=pk)
+    poem = get_object_or_404(serializers.GanjoorPoem, pk=pk)
     verses = poem.verses.all()
     return render(request, "core/poem_detail.html", {"poem": poem, "verses": verses})
 

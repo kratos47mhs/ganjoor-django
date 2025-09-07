@@ -1,14 +1,5 @@
 from rest_framework import serializers
-from .models import (
-    GanjoorPoet,
-    GanjoorCategory,
-    GanjoorPoem,
-    GanjoorVerse,
-    GanjoorFavorite,
-    GanjoorPoemAudio,
-    GanjoorAudioSync,
-    UserSetting,
-)
+from .models import *
 
 class GanjoorPoetSerializer(serializers.ModelSerializer):
     class Meta:
