@@ -11,6 +11,7 @@ from .models import (
     GanjoorPoet,
     GanjoorVerse,
     UserSetting,
+    VersePosition,
 )
 from .serializers import (
     GanjoorAudioSyncSerializer,
@@ -24,6 +25,33 @@ from .serializers import (
 )
 
 
+# -------------------
+# Helper Functions
+# -------------------
+def get_breadcrumbs(category):
+    """Return breadcrumbs safely even if parent category was deleted."""
+    crumbs = []
+    while category:
+        crumbs.insert(0, category)
+        try:
+            category = category.parent  # may raise DoesNotExist
+        except GanjoorCategory.DoesNotExist:
+            break
+    return crumbs
+
+
+
+def get_all_poems(category):
+    """Recursively collect all poems in category and subcategories."""
+    poems = list(category.poems.select_related("category__poet").all())
+    for subcat in category.children.all():
+        poems += get_all_poems(subcat)
+    return poems
+
+
+# -------------------
+# Regular Django Views
+# -------------------
 def home(request):
     poets = GanjoorPoet.objects.all()
     return render(request, "core/home.html", {"poets": poets})
@@ -32,7 +60,7 @@ def home(request):
 def poet_detail(request, pk):
     poet = get_object_or_404(GanjoorPoet, pk=pk)
     categories = poet.categories.filter(parent=None)
-    poems = GanjoorPoem.objects.filter(category__poet=poet)
+    poems = GanjoorPoem.objects.select_related("category__poet").filter(category__poet=poet)
     return render(
         request,
         "core/poet_detail.html",
@@ -45,29 +73,10 @@ def poet_detail(request, pk):
 
 
 def category_detail(request, pk):
-    category = get_object_or_404(GanjoorCategory, pk=pk)
-    poems = category.poems.all()
+    category = get_object_or_404(GanjoorCategory.objects.select_related("poet"), pk=pk)
+    poems = category.poems.select_related("category__poet").all()
     subcategories = category.children.all()
-
-    # Safe breadcrumbs
-    breadcrumbs = []
-    cat = category
-    while cat:
-        breadcrumbs.insert(0, cat)
-        if cat.parent_id is None:
-            break
-        try:
-            cat = GanjoorCategory.objects.get(pk=cat.parent_id)
-        except GanjoorCategory.DoesNotExist:
-            break
-
-    # Recursively collect all poems in subcategories
-    def get_all_poems(cat):
-        poems = list(cat.poems.all())
-        for subcat in cat.children.all():
-            poems += get_all_poems(subcat)
-        return poems
-
+    breadcrumbs = get_breadcrumbs(category)
     all_poems = get_all_poems(category)
 
     return render(
@@ -84,30 +93,54 @@ def category_detail(request, pk):
 
 
 def poem_detail(request, pk):
-    poem = get_object_or_404(GanjoorPoem, pk=pk)
-    verses = poem.verses.all()
-    breadcrumbs = []
-    cat = poem.category
-    while cat:
-        breadcrumbs.insert(0, cat)
-        if cat.parent_id is None:
-            break
-        # fetch parent by id, or break if not found
-        try:
-            cat = GanjoorCategory.objects.get(pk=cat.parent_id)
-        except GanjoorCategory.DoesNotExist:
-            break
+    # Fetch poem with category & poet to prevent N+1
+    poem = get_object_or_404(
+        GanjoorPoem.objects.select_related("category__poet"), pk=pk
+    )
+
+    # Group verses by order and position
+    verses_qs = poem.verses.all().order_by("order", "position")
+    verses_map = {}     # classic two-hemistich
+    single_verses = []  # free, centered, comments, paragraphs
+
+    for v in verses_qs:
+        if v.position in (VersePosition.RIGHT, VersePosition.LEFT):
+            if v.order not in verses_map:
+                verses_map[v.order] = ["", ""]
+            if v.position == VersePosition.RIGHT:
+                verses_map[v.order][0] = v.text
+            else:
+                verses_map[v.order][1] = v.text
+        else:
+            single_verses.append(v)
+
+    breadcrumbs = get_breadcrumbs(poem.category)
+
     return render(
         request,
         "core/poem_detail.html",
         {
             "poem": poem,
-            "verses": verses,
+            "verses_map": verses_map,
+            "single_verses": single_verses,
             "breadcrumbs": breadcrumbs,
         },
     )
 
 
+@login_required
+def favorites(request):
+    favs = (
+        request.user.ganjoor_favorites
+        .select_related("poem__category__poet")
+        .all()
+    )
+    return render(request, "core/favorites.html", {"favorites": favs})
+
+
+# -------------------
+# DRF ViewSets
+# -------------------
 class GanjoorPoetViewSet(viewsets.ModelViewSet):
     queryset = GanjoorPoet.objects.all()
     serializer_class = GanjoorPoetSerializer
@@ -133,9 +166,14 @@ class GanjoorVerseViewSet(viewsets.ModelViewSet):
 
 
 class GanjoorFavoriteViewSet(viewsets.ModelViewSet):
-    queryset = GanjoorFavorite.objects.all()
     serializer_class = GanjoorFavoriteSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return GanjoorFavorite.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
 class GanjoorPoemAudioViewSet(viewsets.ModelViewSet):
@@ -154,9 +192,3 @@ class UserSettingViewSet(viewsets.ModelViewSet):
     queryset = UserSetting.objects.all()
     serializer_class = UserSettingSerializer
     permission_classes = [permissions.IsAuthenticated]
-
-
-@login_required
-def favorites(request):
-    favs = request.user.ganjoor_favorites.select_related("poem").all()
-    return render(request, "core/favorites.html", {"favorites": favs})

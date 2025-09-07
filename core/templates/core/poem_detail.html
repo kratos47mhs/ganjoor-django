@@ -1,23 +1,45 @@
 {% extends "core/base.html" %}
 {% block title %}{{ poem.title }} - Ganjoor{% endblock %}
 {% block content %}
+
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'core:poet_detail' poem.category.poet.pk %}">{{ poem.category.poet.name }}</a></li>
+            <li class="breadcrumb-item">
+                <a href="{% url 'core:poet_detail' poem.category.poet.pk %}">
+                    {{ poem.category.poet.name }}
+                </a>
+            </li>
             {% for crumb in breadcrumbs %}
-                <li class="breadcrumb-item"><a href="{% url 'core:category_detail' crumb.pk %}">{{ crumb.title }}</a></li>
+                <li class="breadcrumb-item">
+                    <a href="{% url 'core:category_detail' crumb.pk %}">{{ crumb.title }}</a>
+                </li>
             {% endfor %}
             <li class="breadcrumb-item active" aria-current="page">{{ poem.title }}</li>
         </ol>
     </nav>
-    <h1>{{ poem.title }}</h1>
-    <h3>Verses</h3>
-    <ol>
-        {% for verse in verses %}
-            <li><span style="font-size:1.2em">{{ verse.text }}</span></li>
-        {% empty %}
-            <li>No verses found.</li>
+
+    <h1 class="text-end">{{ poem.title }}</h1>
+
+    <div style="direction:rtl; font-size:1.3em; font-family: Tahoma, 'Vazir', 'IranNastaliq', serif;">
+        <!-- Classic 2-hemistich verses -->
+        <table class="table table-borderless w-auto mx-auto text-end">
+            <tbody>
+            {% for order, mesra in verses_map.items %}
+                <tr>
+                    <td class="px-3">{{ mesra.0 }}</td>
+                    <td class="px-3">{{ mesra.1 }}</td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="2">بیتی پیدا نشد.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Single / centered / comment verses -->
+        {% for verse in single_verses %}
+            <div style="text-align:center; margin:1em 0;">{{ verse.text }}</div>
         {% endfor %}
-    </ol>
+    </div>
+
 {% endblock %}
