@@ -1,7 +1,13 @@
 {% extends "core/base.html" %}
-{% block title %}Poets - Ganjoor{% endblock %}
+{% block title %}گنجور - گنجینهٔ شعر فارسی{% endblock %}
 {% block content %}
-    <h1>Poets</h1>
+    <div class="p-5 mb-4 bg-light rounded-3">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold">به گنجور خوش آمدید</h1>
+            <p class="col-md-8 fs-4">گنجینهٔ رایگان شعر فارسی</p>
+        </div>
+    </div>
+
     <div class="row">
         {% for poet in poets %}
             <div class="col-md-4 mb-3">
@@ -9,12 +15,12 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ poet.name }}</h5>
                         <p class="card-text">{{ poet.description|truncatewords:30 }}</p>
-                        <a href="{% url 'core:poet_detail' poet.pk %}" class="btn btn-primary btn-sm">Browse</a>
+                        <a href="{% url 'core:poet_detail' poet.pk %}" class="btn btn-primary btn-sm">مرور آثار</a>
                     </div>
                 </div>
             </div>
         {% empty %}
-            <div class="col-12"><p>No poets found.</p></div>
+            <div class="col-12"><p>شاعری یافت نشد.</p></div>
         {% endfor %}
     </div>
 {% endblock %}

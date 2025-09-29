@@ -8,5 +8,6 @@ urlpatterns = [
     path("poet/<int:pk>/", views.poet_detail, name="poet_detail"),
     path("category/<int:pk>/", views.category_detail, name="category_detail"),
     path("poem/<int:pk>/", views.poem_detail, name="poem_detail"),
-    path("favorites/", views.favorites, name="favorites"),  # <--- This line must be here!
+    path("favorites/", views.favorites, name="favorites"),
+    path("search/", views.search, name="search"),
 ]

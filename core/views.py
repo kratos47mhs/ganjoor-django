@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render
 from rest_framework import permissions, viewsets
+from django.db.models import Q
 
 from .models import (
     GanjoorAudioSync,
@@ -136,6 +137,17 @@ def favorites(request):
         .all()
     )
     return render(request, "core/favorites.html", {"favorites": favs})
+
+
+def search(request):
+    query = request.GET.get("q")
+    if query:
+        poems = GanjoorPoem.objects.search(query)
+    else:
+        poems = GanjoorPoem.objects.none()
+    return render(
+        request, "core/search_results.html", {"poems": poems, "query": query}
+    )
 
 
 # -------------------

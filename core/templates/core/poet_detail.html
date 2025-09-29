@@ -1,24 +1,35 @@
 {% extends "core/base.html" %}
-{% block title %}{{ poet.name }} - Ganjoor{% endblock %}
+{% block title %}{{ poet.name }} - گنجور{% endblock %}
 {% block content %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">خانه</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ poet.name }}</li>
+        </ol>
+    </nav>
+
     <h1>{{ poet.name }}</h1>
     <p>{{ poet.description }}</p>
-    <h3>Categories</h3>
-    <ul class="list-group mb-3">
+
+    <h3>دسته‌بندی‌ها</h3>
+    <div class="list-group mb-3">
         {% for category in categories %}
-            <li class="list-group-item">
-                <a href="{% url 'core:category_detail' category.pk %}">{{ category.title }}</a>
-            </li>
+            <a href="{% url 'core:category_detail' category.pk %}" class="list-group-item list-group-item-action">
+                {{ category.title }}
+            </a>
         {% empty %}
-            <li class="list-group-item">No categories found.</li>
+            <div class="list-group-item">دسته‌بندی‌ای یافت نشد.</div>
         {% endfor %}
-    </ul>
-    <h3>All Poems by {{ poet.name }}</h3>
-    <ul>
+    </div>
+
+    <h3>تمام اشعار {{ poet.name }}</h3>
+    <div class="list-group">
         {% for poem in poems %}
-            <li><a href="{% url 'core:poem_detail' poem.pk %}">{{ poem.title }}</a></li>
+            <a href="{% url 'core:poem_detail' poem.pk %}" class="list-group-item list-group-item-action">
+                {{ poem.title }}
+            </a>
         {% empty %}
-            <li>No poems found.</li>
+            <div class="list-group-item">شعری یافت نشد.</div>
         {% endfor %}
-    </ul>
+    </div>
 {% endblock %}
