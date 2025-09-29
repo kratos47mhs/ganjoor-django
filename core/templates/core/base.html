@@ -33,6 +33,10 @@
             <span class="navbar-text">
                 {% if user.is_authenticated %}
                     درود, {{ user.username }}!
+                    <form action="{% url 'core:logout' %}" method="post" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-light btn-sm ms-2">خروج</button>
+                    </form>
                 {% else %}
                     <a class="btn btn-outline-light btn-sm" href="/admin/login/">ورود</a>
                 {% endif %}

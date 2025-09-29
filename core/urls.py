@@ -1,4 +1,5 @@
 from django.urls import path
+from django.contrib.auth.views import LogoutView
 from . import views
 
 app_name = "core"  # <--- This is important!
@@ -10,4 +11,5 @@ urlpatterns = [
     path("poem/<int:pk>/", views.poem_detail, name="poem_detail"),
     path("favorites/", views.favorites, name="favorites"),
     path("search/", views.search, name="search"),
+    path("logout/", LogoutView.as_view(), name="logout"),
 ]
