@@ -5,6 +5,28 @@
             "driver": "SQLite",
             "database": "${workspaceFolder:ganjoor-django}/db.sqlite3",
             "name": "ganjoor-django"
+        },
+        {
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "ganjoor-django",
+            "database": "ganjoor",
+            "username": "ganjoor",
+            "password": "Xh8TFTjYLtApOAvyQiIIdKjC6rAQhfO3QEH48cTRQlhjeH3LCg"
+        },
+        {
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "password": "Xh8TFTjYLtApOAvyQiIIdKjC6rAQhfO3QEH48cTRQlhjeH3LCg",
+            "database": "ganjoor",
+            "username": "ganjoor",
+            "name": "ganjoor"
         }
     ]
 }

@@ -54,8 +54,13 @@ def get_all_poems(category):
 # Regular Django Views
 # -------------------
 def home(request):
-    poets = GanjoorPoet.objects.all()
-    return render(request, "core/home.html", {"poets": poets})
+    poets_by_century = {}
+    for century, century_display in GanjoorPoet.CENTURY_CHOICES:
+        poets_by_century[century] = {
+            'display': century_display,
+            'poets': GanjoorPoet.objects.filter(century=century).order_by('name')
+        }
+    return render(request, "core/home.html", {"poets_by_century": poets_by_century})
 
 
 def poet_detail(request, pk):

@@ -1,14 +1,24 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Q
+from django.core.validators import URLValidator
 
 
 # -------------------
 # Poet
 # -------------------
 class GanjoorPoet(models.Model):
+    CENTURY_CHOICES = [
+        ('ancient', 'باستانی'),
+        ('classical', 'کلاسیک'),
+        ('contemporary', 'معاصر'),
+        ('modern', 'نو'),
+    ]
     name = models.CharField(max_length=255, db_index=True)
     description = models.TextField(blank=True)
+    century = models.CharField(max_length=20, choices=CENTURY_CHOICES, default='classical', db_index=True)
+    image = models.ImageField(upload_to='poets/', blank=True, null=True, help_text='Portrait image of the poet')
+    image_slug = models.CharField(max_length=255, blank=True, null=True, help_text='English transliteration for image filename')
 
     class Meta:
         db_table = "ganjoor_poet"
