@@ -48,6 +48,7 @@ opentelemetry-instrumentation-wsgi==0.43b0
 opentelemetry-propagator-aws-xray==1.0.1
 opentelemetry-proto==1.22.0
 opentelemetry-sdk==1.22.0
+opentelemetry-exporter-otlp-proto-grpc==1.22.0
 opentelemetry-semantic-conventions==0.43b0
 opentelemetry-util-http==0.43b0
 protobuf==4.25.8
