@@ -1,0 +1,16 @@
+{% extends "core/base.html" %}
+{% block title %}Favorites{% endblock %}
+{% block content %}
+    <h1>My Favorite Poems</h1>
+    {% if favorites %}
+        <ul class="list-group">
+            {% for fav in favorites %}
+                <li class="list-group-item">
+                    <a href="{% url 'core:poem_detail' fav.poem.pk %}">{{ fav.poem.title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>You have no favorites yet.</p>
+    {% endif %}
+{% endblock %}

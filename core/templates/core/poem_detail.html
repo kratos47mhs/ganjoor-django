@@ -1,0 +1,45 @@
+{% extends "core/base.html" %}
+{% block title %}{{ poem.title }} - گنجور{% endblock %}
+{% block content %}
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">خانه</a></li>
+            <li class="breadcrumb-item">
+                <a href="{% url 'core:poet_detail' poem.category.poet.pk %}">
+                    {{ poem.category.poet.name }}
+                </a>
+            </li>
+            {% for crumb in breadcrumbs %}
+                <li class="breadcrumb-item">
+                    <a href="{% url 'core:category_detail' crumb.pk %}">{{ crumb.title }}</a>
+                </li>
+            {% endfor %}
+            <li class="breadcrumb-item active" aria-current="page">{{ poem.title }}</li>
+        </ol>
+    </nav>
+
+    <div class="poem-container">
+        <h1 class="poem-title">{{ poem.title }}</h1>
+
+        <div class="poem-verse">
+            <!-- Classic 2-hemistich verses -->
+            <table class="table table-borderless w-auto mx-auto text-end">
+                <tbody>
+                {% for order, mesra in verses_map.items %}
+                    <tr>
+                        <td class="px-3">{{ mesra.0 }}</td>
+                        <td class="px-3">{{ mesra.1 }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Single / centered / comment verses -->
+            {% for verse in single_verses %}
+                <div style="text-align:center; margin:1em 0;">{{ verse.text }}</div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

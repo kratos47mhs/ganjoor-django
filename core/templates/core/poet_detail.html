@@ -1,0 +1,35 @@
+{% extends "core/base.html" %}
+{% block title %}{{ poet.name }} - گنجور{% endblock %}
+{% block content %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">خانه</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ poet.name }}</li>
+        </ol>
+    </nav>
+
+    <h1>{{ poet.name }}</h1>
+    <p>{{ poet.description }}</p>
+
+    <h3>دسته‌بندی‌ها</h3>
+    <div class="list-group mb-3">
+        {% for category in categories %}
+            <a href="{% url 'core:category_detail' category.pk %}" class="list-group-item list-group-item-action">
+                {{ category.title }}
+            </a>
+        {% empty %}
+            <div class="list-group-item">دسته‌بندی‌ای یافت نشد.</div>
+        {% endfor %}
+    </div>
+
+    <h3>تمام اشعار {{ poet.name }}</h3>
+    <div class="list-group">
+        {% for poem in poems %}
+            <a href="{% url 'core:poem_detail' poem.pk %}" class="list-group-item list-group-item-action">
+                {{ poem.title }}
+            </a>
+        {% empty %}
+            <div class="list-group-item">شعری یافت نشد.</div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "core/base.html" %}
+{% block title %}نتایج جستجو برای "{{ query }}" - گنجور{% endblock %}
+{% block content %}
+    <h1>نتایج جستجو برای "{{ query }}"</h1>
+
+    <div class="list-group">
+        {% for poem in poems %}
+            <a href="{% url 'core:poem_detail' poem.pk %}" class="list-group-item list-group-item-action">
+                {{ poem.title }} ({{ poem.category.poet.name }})
+            </a>
+        {% empty %}
+            <div class="list-group-item">شعری یافت نشد.</div>
+        {% endfor %}
+    </div>
+{% endblock %}

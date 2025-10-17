@@ -1,0 +1,77 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}گنجور - گنجینهٔ شعر فارسی{% endblock %}
+{% block content %}
+    <div class="hero-section bg-primary text-white py-5 mb-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="display-4 fw-bold mb-3">به گنجور خوش آمدید</h1>
+                    <p class="lead fs-4 mb-4">گنجینهٔ رایگان شعر و ادبیات فارسی - پایگاه داده کاملی از اشعار کلاسیک و معاصر</p>
+                    <a href="#poets" class="btn btn-light btn-lg me-3">مشاهده شعرا</a>
+                    <a href="#search" class="btn btn-outline-light btn-lg">جستجو</a>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <i class="fas fa-book-open fa-6x text-white opacity-75"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section id="poets" class="poets-section mb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="text-center mb-5">شعراى پارسى زبان</h2>
+                </div>
+            </div>
+
+            {% for century_key, century_data in poets_by_century.items %}
+                {% if century_data.poets %}
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="poet-century">
+                                <h3 class="mb-3">{{ century_data.display }}</h3>
+                                <div class="row g-3">
+                                    {% for poet in century_data.poets %}
+                                        <div class="col-auto">
+                                            <a href="{% url 'core:poet_detail' poet.pk %}" class="poet-card" title="{{ poet.description }}">
+                                                <img src="{% static 'core/images/poets/' %}{{ poet.image_slug }}.gif" alt="{{ poet.name }}" class="poet-image" onerror="this.src='/static/core/images/poets/default-poet.png'">
+                                                <div class="poet-name">{{ poet.name }}</div>
+                                            </a>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+            {% if not poets_by_century %}
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <p class="text-muted">در حال حاضر شاعری در سیستم ثبت نشده است.</p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <section id="search" class="search-section py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h3 class="mb-4">جستجو در گنجور</h3>
+                    <p class="mb-4">در بین صدها هزار بیت شعر جستجو کنید</p>
+                    <form action="{% url 'core:search' %}" method="get" class="d-flex justify-content-center">
+                        <input class="form-control form-control-lg me-3" type="search" placeholder="بیتی از شعر یا نام شاعر وارد کنید..." aria-label="Search" name="q" style="max-width: 500px;">
+                        <button class="btn btn-primary btn-lg" type="submit">
+                            <i class="fas fa-search"></i> جستجو
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
