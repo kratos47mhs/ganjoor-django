@@ -8,7 +8,7 @@ Ganjoor is a web application for browsing and reading a vast collection of Persi
 *   **Beautiful Reading Experience:** A clean and focused reading view for poems, with support for various verse types.
 *   **User Favorites:** Registered users can save their favorite poems for easy access.
 *   **Search:** A powerful search functionality to find poems by title or content.
-*   **RESTful API:** A comprehensive API for programmatic access to the poetry data.
+*   **RESTful API:** A comprehensive API for programmatic access to the poetry data, with full OpenAPI/Swagger documentation.
 *   **Observability with OpenTelemetry and SigNoz:** The application is fully instrumented with OpenTelemetry to send logs, metrics, and traces to a SigNoz server for monitoring and troubleshooting.
 
 ## Technologies Used
@@ -16,6 +16,7 @@ Ganjoor is a web application for browsing and reading a vast collection of Persi
 *   **Backend:**
     *   Django
     *   Django Rest Framework
+    *   DRF Spectacular (for OpenAPI/Swagger documentation)
     *   PostgreSQL
 *   **Frontend:**
     *   HTML5
@@ -79,6 +80,10 @@ The application provides a RESTful API for accessing the poetry data. The API en
 *   `/api/poems/`
 *   `/api/verses/`
 *   `/api/favorites/`
+
+### API Documentation
+
+Interactive API documentation is available via Swagger UI at `/api/schema/swagger-ui/` when the development server is running. This provides a user-friendly interface to explore and test the API endpoints, view request/response schemas, and understand authentication requirements.
 
 ## Contributing
 
