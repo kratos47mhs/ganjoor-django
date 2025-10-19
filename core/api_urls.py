@@ -8,10 +8,9 @@ router.register(r"poets", GanjoorPoetViewSet)
 router.register(r"categories", GanjoorCategoryViewSet)
 router.register(r"poems", GanjoorPoemViewSet)
 router.register(r"verses", GanjoorVerseViewSet)
-# router.register(r"favorites", GanjoorFavoriteViewSet)
 router.register(r"audios", GanjoorPoemAudioViewSet)
 router.register(r"audio-syncs", GanjoorAudioSyncViewSet)
-router.register(r"settings", UserSettingViewSet)
+router.register(r"settings", UserSettingViewSet, basename="setting")
 router.register(r"favorites", GanjoorFavoriteViewSet, basename="favorite")
 
 urlpatterns = [

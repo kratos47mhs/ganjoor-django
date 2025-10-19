@@ -1,0 +1,441 @@
+# English translations for Ganjoor Django.
+# Copyright (C) 2025
+# This file is distributed under the same license as the Ganjoor package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Ganjoor 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-19 12:00+0000\n"
+"PO-Revision-Date: 2025-01-19 12:00+0000\n"
+"Last-Translator: Ganjoor Team\n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# Models - GanjoorPoet
+msgid "Ancient"
+msgstr "Ancient"
+
+msgid "Classical"
+msgstr "Classical"
+
+msgid "Contemporary"
+msgstr "Contemporary"
+
+msgid "Modern"
+msgstr "Modern"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Century"
+msgstr "Period"
+
+msgid "Image"
+msgstr "Image"
+
+msgid "Portrait image of the poet"
+msgstr "Portrait image of the poet"
+
+msgid "Image Slug"
+msgstr "Image Slug"
+
+msgid "English transliteration for image filename"
+msgstr "English transliteration for image filename"
+
+msgid "Poet"
+msgstr "Poet"
+
+msgid "Poets"
+msgstr "Poets"
+
+# Models - GanjoorCategory
+msgid "Title"
+msgstr "Title"
+
+msgid "Parent Category"
+msgstr "Parent Category"
+
+msgid "URL"
+msgstr "URL"
+
+msgid "Category"
+msgstr "Category"
+
+msgid "Categories"
+msgstr "Categories"
+
+# Models - GanjoorPoem
+msgid "Poem"
+msgstr "Poem"
+
+msgid "Poems"
+msgstr "Poems"
+
+# Models - VersePosition
+msgid "Right (First Hemistich)"
+msgstr "Right (First Hemistich)"
+
+msgid "Left (Second Hemistich)"
+msgstr "Left (Second Hemistich)"
+
+msgid "Centered Verse 1"
+msgstr "Centered Verse 1"
+
+msgid "Centered Verse 2"
+msgstr "Centered Verse 2"
+
+msgid "Single (Free Verse)"
+msgstr "Single (Free Verse)"
+
+msgid "Comment"
+msgstr "Comment"
+
+msgid "Paragraph (Prose)"
+msgstr "Paragraph (Prose)"
+
+# Models - GanjoorVerse
+msgid "Order"
+msgstr "Order"
+
+msgid "Order of the verse in the poem"
+msgstr "Order of the verse in the poem"
+
+msgid "Position"
+msgstr "Position"
+
+msgid "Text"
+msgstr "Text"
+
+# Models - GanjoorFavorite
+msgid "User"
+msgstr "User"
+
+msgid "Verse"
+msgstr "Verse"
+
+msgid "Created At"
+msgstr "Created At"
+
+msgid "Favorite"
+msgstr "Favorite"
+
+msgid "Favorites"
+msgstr "Favorites"
+
+# Models - GanjoorPoemAudio
+msgid "Audio File"
+msgstr "Audio File"
+
+msgid "Download URL"
+msgstr "Download URL"
+
+msgid "Is Direct"
+msgstr "Is Direct"
+
+msgid "Sync GUID"
+msgstr "Sync GUID"
+
+msgid "File Checksum"
+msgstr "File Checksum"
+
+msgid "Is Uploaded"
+msgstr "Is Uploaded"
+
+msgid "Poem Audio"
+msgstr "Poem Audio"
+
+msgid "Poem Audios"
+msgstr "Poem Audios"
+
+# Models - GanjoorAudioSync
+msgid "Audio"
+msgstr "Audio"
+
+msgid "Verse Order"
+msgstr "Verse Order"
+
+msgid "Milliseconds"
+msgstr "Milliseconds"
+
+msgid "Audio Sync"
+msgstr "Audio Sync"
+
+msgid "Audio Syncs"
+msgstr "Audio Syncs"
+
+# Models - UserSetting
+msgid "View Mode"
+msgstr "View Mode"
+
+msgid "Font Size"
+msgstr "Font Size"
+
+msgid "Show Line Numbers"
+msgstr "Show Line Numbers"
+
+msgid "Last Highlight"
+msgstr "Last Highlight"
+
+msgid "Browse Button Visible"
+msgstr "Browse Button Visible"
+
+msgid "Comments Button Visible"
+msgstr "Comments Button Visible"
+
+msgid "Copy Button Visible"
+msgstr "Copy Button Visible"
+
+msgid "Print Button Visible"
+msgstr "Print Button Visible"
+
+msgid "Home Button Visible"
+msgstr "Home Button Visible"
+
+msgid "Random Button Visible"
+msgstr "Random Button Visible"
+
+msgid "Editor Button Visible"
+msgstr "Editor Button Visible"
+
+msgid "Download Button Visible"
+msgstr "Download Button Visible"
+
+msgid "User Setting"
+msgstr "User Setting"
+
+msgid "User Settings"
+msgstr "User Settings"
+
+# Serializers - Validation messages
+msgid "Poet name cannot be empty."
+msgstr "Poet name cannot be empty."
+
+msgid "Category title cannot be empty."
+msgstr "Category title cannot be empty."
+
+msgid "Verse text cannot be empty."
+msgstr "Verse text cannot be empty."
+
+msgid "Verse order must be a positive number."
+msgstr "Verse order must be a positive number."
+
+msgid "A verse with this order already exists in this poem."
+msgstr "A verse with this order already exists in this poem."
+
+msgid "Poem title cannot be empty."
+msgstr "Poem title cannot be empty."
+
+msgid "This verse does not belong to this poem."
+msgstr "This verse does not belong to this poem."
+
+msgid "This verse has already been added to favorites."
+msgstr "This verse has already been added to favorites."
+
+msgid "Download URL must start with http:// or https://"
+msgstr "Download URL must start with http:// or https://"
+
+msgid "Time must be a positive number."
+msgstr "Time must be a positive number."
+
+msgid "This audio file does not belong to this poem."
+msgstr "This audio file does not belong to this poem."
+
+msgid "A verse with this order does not exist in this poem."
+msgstr "A verse with this order does not exist in this poem."
+
+msgid "Font size must be between 8 and 48."
+msgstr "Font size must be between 8 and 48."
+
+msgid "View mode must be one of: %(modes)s"
+msgstr "View mode must be one of: %(modes)s"
+
+# Views - Messages
+msgid "Please provide a search query."
+msgstr "Please provide a search query."
+
+msgid "Poem and verse IDs are required."
+msgstr "Poem and verse IDs are required."
+
+msgid "Removed from favorites."
+msgstr "Removed from favorites."
+
+msgid "Added to favorites."
+msgstr "Added to favorites."
+
+msgid "Settings not found for this user."
+msgstr "Settings not found for this user."
+
+# Templates - Base
+msgid "Ganjoor - Persian Poetry Database"
+msgstr "Ganjoor - Persian Poetry Database"
+
+msgid "Change Theme"
+msgstr "Change Theme"
+
+msgid "Login"
+msgstr "Login"
+
+msgid "Logout"
+msgstr "Logout"
+
+msgid "Toggle navigation"
+msgstr "Toggle navigation"
+
+msgid "Home"
+msgstr "Home"
+
+msgid "Search"
+msgstr "Search"
+
+msgid "API"
+msgstr "API"
+
+msgid "About"
+msgstr "About"
+
+msgid "Search for poems or poets..."
+msgstr "Search for poems or poets..."
+
+msgid "Close"
+msgstr "Close"
+
+msgid "Ganjoor"
+msgstr "Ganjoor"
+
+msgid "Persian Poetry Database - Providing free access to a complete collection of Persian poetry"
+msgstr "Persian Poetry Database - Providing free access to a complete collection of Persian poetry"
+
+msgid "API Documentation"
+msgstr "API Documentation"
+
+msgid "Ganjoor. All rights reserved."
+msgstr "Ganjoor. All rights reserved."
+
+# Admin
+msgid "Personal info"
+msgstr "Personal info"
+
+msgid "Permissions"
+msgstr "Permissions"
+
+msgid "Important dates"
+msgstr "Important dates"
+
+# Common
+msgid "Yes"
+msgstr "Yes"
+
+msgid "No"
+msgstr "No"
+
+msgid "Save"
+msgstr "Save"
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "Delete"
+msgstr "Delete"
+
+msgid "Edit"
+msgstr "Edit"
+
+msgid "Add"
+msgstr "Add"
+
+msgid "Back"
+msgstr "Back"
+
+msgid "Next"
+msgstr "Next"
+
+msgid "Previous"
+msgstr "Previous"
+
+msgid "Loading..."
+msgstr "Loading..."
+
+msgid "Error"
+msgstr "Error"
+
+msgid "Success"
+msgstr "Success"
+
+msgid "Warning"
+msgstr "Warning"
+
+msgid "Info"
+msgstr "Info"
+
+# Pagination
+msgid "Page"
+msgstr "Page"
+
+msgid "of"
+msgstr "of"
+
+msgid "Showing"
+msgstr "Showing"
+
+msgid "to"
+msgstr "to"
+
+msgid "entries"
+msgstr "entries"
+
+# Date and time
+msgid "Today"
+msgstr "Today"
+
+msgid "Yesterday"
+msgstr "Yesterday"
+
+msgid "Tomorrow"
+msgstr "Tomorrow"
+
+msgid "Now"
+msgstr "Now"
+
+msgid "January"
+msgstr "January"
+
+msgid "February"
+msgstr "February"
+
+msgid "March"
+msgstr "March"
+
+msgid "April"
+msgstr "April"
+
+msgid "May"
+msgstr "May"
+
+msgid "June"
+msgstr "June"
+
+msgid "July"
+msgstr "July"
+
+msgid "August"
+msgstr "August"
+
+msgid "September"
+msgstr "September"
+
+msgid "October"
+msgstr "October"
+
+msgid "November"
+msgstr "November"
+
+msgid "December"
+msgstr "December"

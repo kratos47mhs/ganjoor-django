@@ -1,13 +1,18 @@
 {% load static %}
+{% load i18n %}
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_CODE == 'fa' %}rtl{% else %}ltr{% endif %}">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}گنجور - پایگاه داده اشعار فارسی{% endblock %}</title>
+    <title>{% block title %}{% trans "Ganjoor - Persian Poetry Database" %}{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Bootstrap 5 CSS -->
+    {% if LANGUAGE_CODE == 'fa' %}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
-    <!-- Vazir Font -->
+    {% else %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    {% endif %}
+    <!-- Vazir Font for Persian -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -18,7 +23,7 @@
     <link rel="icon" href="{% static 'favicon.ico' %}">
     <style>
         body {
-            font-family: 'Vazirmatn', sans-serif;
+            font-family: {% if LANGUAGE_CODE == 'fa' %}'Vazirmatn', {% endif %}sans-serif;
         }
         .sticky-top {
             top: 0;
@@ -46,6 +51,19 @@
             color: #212529;
             text-decoration: none;
         }
+        .language-switcher {
+            position: relative;
+            display: inline-block;
+        }
+        .language-switcher .dropdown-menu {
+            min-width: 120px;
+        }
+        .language-switcher .flag-icon {
+            width: 20px;
+            height: 15px;
+            display: inline-block;
+            margin-right: 5px;
+        }
     </style>
     {% block head %}{% endblock %}
 </head>
@@ -55,19 +73,63 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-6">
-                    <h1 class="h3 mb-0"><a href="{% url 'core:home' %}" class="text-white text-decoration-none"><i class="fas fa-book"></i> گنجور - پایگاه داده اشعار فارسی</a></h1>
+                    <h1 class="h3 mb-0">
+                        <a href="{% url 'core:home' %}" class="text-white text-decoration-none">
+                            <i class="fas fa-book"></i> {% trans "Ganjoor - Persian Poetry Database" %}
+                        </a>
+                    </h1>
                 </div>
-                <div class="col-md-6 text-end">
+                <div class="col-md-6 {% if LANGUAGE_CODE == 'fa' %}text-end{% else %}text-start{% endif %}">
+                    <!-- Language Switcher -->
+                    <div class="language-switcher d-inline-block me-2">
+                        <div class="dropdown">
+                            <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                {% if LANGUAGE_CODE == 'fa' %}
+                                    <i class="fas fa-globe"></i> فارسی
+                                {% else %}
+                                    <i class="fas fa-globe"></i> English
+                                {% endif %}
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                                <li>
+                                    <form action="{% url 'core:set_language' %}" method="post" class="d-inline">
+                                        {% csrf_token %}
+                                        <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                                        <input type="hidden" name="language" value="fa">
+                                        <button type="submit" class="dropdown-item {% if LANGUAGE_CODE == 'fa' %}active{% endif %}">
+                                            🇮🇷 فارسی
+                                        </button>
+                                    </form>
+                                </li>
+                                <li>
+                                    <form action="{% url 'core:set_language' %}" method="post" class="d-inline">
+                                        {% csrf_token %}
+                                        <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                                        <input type="hidden" name="language" value="en">
+                                        <button type="submit" class="dropdown-item {% if LANGUAGE_CODE == 'en' %}active{% endif %}">
+                                            🇬🇧 English
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                     <!-- Theme Toggle -->
-                    <button id="theme-toggle" class="btn btn-outline-light btn-sm me-2" title="تغییر رنگ">
+                    <button id="theme-toggle" class="btn btn-outline-light btn-sm me-2" title="{% trans 'Change Theme' %}">
                         <i class="fas fa-moon"></i>
                     </button>
-                    <!-- Language Toggle (if needed) -->
                     <!-- Favorites Link for logged-in users -->
                     {% if user.is_authenticated %}
-                        <a href="{% url 'core:favorites' %}" class="btn btn-outline-light btn-sm">علاقه‌مندی‌ها</a>
+                        <a href="{% url 'core:favorites' %}" class="btn btn-outline-light btn-sm">
+                            <i class="fas fa-heart"></i> {% trans "Favorites" %}
+                        </a>
+                        <a href="{% url 'core:logout' %}" class="btn btn-outline-light btn-sm">
+                            <i class="fas fa-sign-out-alt"></i> {% trans "Logout" %}
+                        </a>
                     {% else %}
-                        <a href="/admin/login/" class="btn btn-outline-light btn-sm">ورود</a>
+                        <a href="/admin/login/" class="btn btn-outline-light btn-sm">
+                            <i class="fas fa-sign-in-alt"></i> {% trans "Login" %}
+                        </a>
                     {% endif %}
                 </div>
             </div>
@@ -77,24 +139,64 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
         <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="{% trans 'Toggle navigation' %}">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link" href="{% url 'core:home' %}"><i class="fas fa-home"></i> خانه</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#poets">شعرا</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#search">جستجو</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#about">درباره</a></li>
+                <ul class="navbar-nav {% if LANGUAGE_CODE == 'fa' %}me-auto{% else %}ms-auto{% endif %}">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'core:home' %}">
+                            <i class="fas fa-home"></i> {% trans "Home" %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#poets">
+                            <i class="fas fa-users"></i> {% trans "Poets" %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'core:search' %}">
+                            <i class="fas fa-search"></i> {% trans "Search" %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/api/schema/swagger-ui/">
+                            <i class="fas fa-code"></i> {% trans "API" %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">
+                            <i class="fas fa-info-circle"></i> {% trans "About" %}
+                        </a>
+                    </li>
                 </ul>
                 <!-- Search Form -->
                 <form class="d-flex" action="{% url 'core:search' %}" method="get">
-                    <input class="form-control me-2" type="search" placeholder="جستجوی شعر یا شاعر..." aria-label="Search" name="q">
-                    <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i> جستجو</button>
+                    <input class="form-control {% if LANGUAGE_CODE == 'fa' %}me-2{% else %}ms-2{% endif %}"
+                           type="search"
+                           placeholder="{% trans 'Search for poems or poets...' %}"
+                           aria-label="{% trans 'Search' %}"
+                           name="q"
+                           value="{{ request.GET.q }}">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fas fa-search"></i> {% trans "Search" %}
+                    </button>
                 </form>
             </div>
         </div>
     </nav>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{% trans 'Close' %}"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
 
     <!-- Main Content -->
     <main class="container-fluid py-4">
@@ -106,15 +208,29 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <h5>گنجور</h5>
-                    <p>پایگاه داده اشعار فارسی - ارائه رایگان مجموعه کاملی از اشعار فارسی</p>
+                    <h5>{% trans "Ganjoor" %}</h5>
+                    <p>{% trans "Persian Poetry Database - Providing free access to a complete collection of Persian poetry" %}</p>
+                    <p class="small">
+                        <a href="/api/schema/swagger-ui/" class="text-white">
+                            <i class="fas fa-code"></i> {% trans "API Documentation" %}
+                        </a>
+                    </p>
                 </div>
-                <div class="col-md-6 text-end">
-                    <p>&copy; ۱۴۰۴ گنجور. تمامی حقوق محفوظ است.</p>
+                <div class="col-md-6 {% if LANGUAGE_CODE == 'fa' %}text-end{% else %}text-start{% endif %}">
+                    <p>&copy; {% now "Y" %} {% trans "Ganjoor. All rights reserved." %}</p>
                     <div class="social-links">
-                        <a href="#" class="text-white me-2"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="text-white me-2"><i class="fab fa-facebook"></i></a>
-                        <a href="#" class="text-white me-2"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white {% if LANGUAGE_CODE == 'fa' %}me-2{% else %}ms-2{% endif %}" title="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-white {% if LANGUAGE_CODE == 'fa' %}me-2{% else %}ms-2{% endif %}" title="Facebook">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="#" class="text-white {% if LANGUAGE_CODE == 'fa' %}me-2{% else %}ms-2{% endif %}" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-white {% if LANGUAGE_CODE == 'fa' %}me-2{% else %}ms-2{% endif %}" title="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
                     </div>
                 </div>
             </div>

@@ -1,0 +1,441 @@
+# Persian (Farsi) translations for Ganjoor Django.
+# Copyright (C) 2025
+# This file is distributed under the same license as the Ganjoor package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Ganjoor 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-19 12:00+0000\n"
+"PO-Revision-Date: 2025-01-19 12:00+0330\n"
+"Last-Translator: Ganjoor Team\n"
+"Language-Team: Persian\n"
+"Language: fa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+# Models - GanjoorPoet
+msgid "Ancient"
+msgstr "باستانی"
+
+msgid "Classical"
+msgstr "کلاسیک"
+
+msgid "Contemporary"
+msgstr "معاصر"
+
+msgid "Modern"
+msgstr "نو"
+
+msgid "Name"
+msgstr "نام"
+
+msgid "Description"
+msgstr "توضیحات"
+
+msgid "Century"
+msgstr "دوره"
+
+msgid "Image"
+msgstr "تصویر"
+
+msgid "Portrait image of the poet"
+msgstr "تصویر پرتره شاعر"
+
+msgid "Image Slug"
+msgstr "شناسه تصویر"
+
+msgid "English transliteration for image filename"
+msgstr "نام انگلیسی برای فایل تصویر"
+
+msgid "Poet"
+msgstr "شاعر"
+
+msgid "Poets"
+msgstr "شعرا"
+
+# Models - GanjoorCategory
+msgid "Title"
+msgstr "عنوان"
+
+msgid "Parent Category"
+msgstr "دسته‌بندی والد"
+
+msgid "URL"
+msgstr "آدرس"
+
+msgid "Category"
+msgstr "دسته‌بندی"
+
+msgid "Categories"
+msgstr "دسته‌بندی‌ها"
+
+# Models - GanjoorPoem
+msgid "Poem"
+msgstr "شعر"
+
+msgid "Poems"
+msgstr "اشعار"
+
+# Models - VersePosition
+msgid "Right (First Hemistich)"
+msgstr "راست (مصرع اول)"
+
+msgid "Left (Second Hemistich)"
+msgstr "چپ (مصرع دوم)"
+
+msgid "Centered Verse 1"
+msgstr "وسط چین ۱ (ترجیع/ترکیب)"
+
+msgid "Centered Verse 2"
+msgstr "وسط چین ۲ (ترجیع/ترکیب)"
+
+msgid "Single (Free Verse)"
+msgstr "تکی (نیمایی/آزاد)"
+
+msgid "Comment"
+msgstr "توضیح"
+
+msgid "Paragraph (Prose)"
+msgstr "پاراگراف (نثر)"
+
+# Models - GanjoorVerse
+msgid "Order"
+msgstr "ترتیب"
+
+msgid "Order of the verse in the poem"
+msgstr "ترتیب مصرع در شعر"
+
+msgid "Position"
+msgstr "موقعیت"
+
+msgid "Text"
+msgstr "متن"
+
+# Models - GanjoorFavorite
+msgid "User"
+msgstr "کاربر"
+
+msgid "Verse"
+msgstr "مصرع"
+
+msgid "Created At"
+msgstr "تاریخ ایجاد"
+
+msgid "Favorite"
+msgstr "علاقه‌مندی"
+
+msgid "Favorites"
+msgstr "علاقه‌مندی‌ها"
+
+# Models - GanjoorPoemAudio
+msgid "Audio File"
+msgstr "فایل صوتی"
+
+msgid "Download URL"
+msgstr "آدرس دانلود"
+
+msgid "Is Direct"
+msgstr "مستقیم"
+
+msgid "Sync GUID"
+msgstr "شناسه همگام‌سازی"
+
+msgid "File Checksum"
+msgstr "کد کنترل فایل"
+
+msgid "Is Uploaded"
+msgstr "آپلود شده"
+
+msgid "Poem Audio"
+msgstr "صوت شعر"
+
+msgid "Poem Audios"
+msgstr "صوت‌های شعر"
+
+# Models - GanjoorAudioSync
+msgid "Audio"
+msgstr "صوت"
+
+msgid "Verse Order"
+msgstr "ترتیب مصرع"
+
+msgid "Milliseconds"
+msgstr "میلی‌ثانیه"
+
+msgid "Audio Sync"
+msgstr "همگام‌سازی صوت"
+
+msgid "Audio Syncs"
+msgstr "همگام‌سازی‌های صوت"
+
+# Models - UserSetting
+msgid "View Mode"
+msgstr "حالت نمایش"
+
+msgid "Font Size"
+msgstr "اندازه فونت"
+
+msgid "Show Line Numbers"
+msgstr "نمایش شماره خطوط"
+
+msgid "Last Highlight"
+msgstr "آخرین هایلایت"
+
+msgid "Browse Button Visible"
+msgstr "دکمه مرور قابل مشاهده"
+
+msgid "Comments Button Visible"
+msgstr "دکمه نظرات قابل مشاهده"
+
+msgid "Copy Button Visible"
+msgstr "دکمه کپی قابل مشاهده"
+
+msgid "Print Button Visible"
+msgstr "دکمه چاپ قابل مشاهده"
+
+msgid "Home Button Visible"
+msgstr "دکمه خانه قابل مشاهده"
+
+msgid "Random Button Visible"
+msgstr "دکمه تصادفی قابل مشاهده"
+
+msgid "Editor Button Visible"
+msgstr "دکمه ویرایشگر قابل مشاهده"
+
+msgid "Download Button Visible"
+msgstr "دکمه دانلود قابل مشاهده"
+
+msgid "User Setting"
+msgstr "تنظیمات کاربر"
+
+msgid "User Settings"
+msgstr "تنظیمات کاربران"
+
+# Serializers - Validation messages
+msgid "Poet name cannot be empty."
+msgstr "نام شاعر نمی‌تواند خالی باشد."
+
+msgid "Category title cannot be empty."
+msgstr "عنوان دسته‌بندی نمی‌تواند خالی باشد."
+
+msgid "Verse text cannot be empty."
+msgstr "متن مصرع نمی‌تواند خالی باشد."
+
+msgid "Verse order must be a positive number."
+msgstr "ترتیب مصرع باید عددی مثبت باشد."
+
+msgid "A verse with this order already exists in this poem."
+msgstr "مصرعی با این ترتیب در این شعر وجود دارد."
+
+msgid "Poem title cannot be empty."
+msgstr "عنوان شعر نمی‌تواند خالی باشد."
+
+msgid "This verse does not belong to this poem."
+msgstr "این مصرع به این شعر تعلق ندارد."
+
+msgid "This verse has already been added to favorites."
+msgstr "این مصرع قبلاً به علاقه‌مندی‌ها اضافه شده است."
+
+msgid "Download URL must start with http:// or https://"
+msgstr "آدرس دانلود باید با http:// یا https:// شروع شود."
+
+msgid "Time must be a positive number."
+msgstr "زمان باید عددی مثبت باشد."
+
+msgid "This audio file does not belong to this poem."
+msgstr "این فایل صوتی به این شعر تعلق ندارد."
+
+msgid "A verse with this order does not exist in this poem."
+msgstr "مصرع با این ترتیب در این شعر وجود ندارد."
+
+msgid "Font size must be between 8 and 48."
+msgstr "اندازه فونت باید بین ۸ تا ۴۸ باشد."
+
+msgid "View mode must be one of: %(modes)s"
+msgstr "حالت نمایش باید یکی از این موارد باشد: %(modes)s"
+
+# Views - Messages
+msgid "Please provide a search query."
+msgstr "لطفاً عبارت جستجو را وارد کنید."
+
+msgid "Poem and verse IDs are required."
+msgstr "شناسه شعر و مصرع الزامی است."
+
+msgid "Removed from favorites."
+msgstr "از علاقه‌مندی‌ها حذف شد."
+
+msgid "Added to favorites."
+msgstr "به علاقه‌مندی‌ها اضافه شد."
+
+msgid "Settings not found for this user."
+msgstr "تنظیماتی برای این کاربر یافت نشد."
+
+# Templates - Base
+msgid "Ganjoor - Persian Poetry Database"
+msgstr "گنجور - پایگاه داده اشعار فارسی"
+
+msgid "Change Theme"
+msgstr "تغییر تم"
+
+msgid "Login"
+msgstr "ورود"
+
+msgid "Logout"
+msgstr "خروج"
+
+msgid "Toggle navigation"
+msgstr "تغییر حالت منو"
+
+msgid "Home"
+msgstr "خانه"
+
+msgid "Search"
+msgstr "جستجو"
+
+msgid "API"
+msgstr "رابط برنامه‌نویسی"
+
+msgid "About"
+msgstr "درباره"
+
+msgid "Search for poems or poets..."
+msgstr "جستجوی اشعار یا شعرا..."
+
+msgid "Close"
+msgstr "بستن"
+
+msgid "Ganjoor"
+msgstr "گنجور"
+
+msgid "Persian Poetry Database - Providing free access to a complete collection of Persian poetry"
+msgstr "پایگاه داده اشعار فارسی - ارائه دسترسی رایگان به مجموعه کامل اشعار فارسی"
+
+msgid "API Documentation"
+msgstr "مستندات API"
+
+msgid "Ganjoor. All rights reserved."
+msgstr "گنجور. تمامی حقوق محفوظ است."
+
+# Admin
+msgid "Personal info"
+msgstr "اطلاعات شخصی"
+
+msgid "Permissions"
+msgstr "مجوزها"
+
+msgid "Important dates"
+msgstr "تاریخ‌های مهم"
+
+# Common
+msgid "Yes"
+msgstr "بله"
+
+msgid "No"
+msgstr "خیر"
+
+msgid "Save"
+msgstr "ذخیره"
+
+msgid "Cancel"
+msgstr "لغو"
+
+msgid "Delete"
+msgstr "حذف"
+
+msgid "Edit"
+msgstr "ویرایش"
+
+msgid "Add"
+msgstr "افزودن"
+
+msgid "Back"
+msgstr "بازگشت"
+
+msgid "Next"
+msgstr "بعدی"
+
+msgid "Previous"
+msgstr "قبلی"
+
+msgid "Loading..."
+msgstr "در حال بارگذاری..."
+
+msgid "Error"
+msgstr "خطا"
+
+msgid "Success"
+msgstr "موفق"
+
+msgid "Warning"
+msgstr "هشدار"
+
+msgid "Info"
+msgstr "اطلاعات"
+
+# Pagination
+msgid "Page"
+msgstr "صفحه"
+
+msgid "of"
+msgstr "از"
+
+msgid "Showing"
+msgstr "نمایش"
+
+msgid "to"
+msgstr "تا"
+
+msgid "entries"
+msgstr "مورد"
+
+# Date and time
+msgid "Today"
+msgstr "امروز"
+
+msgid "Yesterday"
+msgstr "دیروز"
+
+msgid "Tomorrow"
+msgstr "فردا"
+
+msgid "Now"
+msgstr "اکنون"
+
+msgid "January"
+msgstr "ژانویه"
+
+msgid "February"
+msgstr "فوریه"
+
+msgid "March"
+msgstr "مارس"
+
+msgid "April"
+msgstr "آوریل"
+
+msgid "May"
+msgstr "می"
+
+msgid "June"
+msgstr "ژوئن"
+
+msgid "July"
+msgstr "ژوئیه"
+
+msgid "August"
+msgstr "آگوست"
+
+msgid "September"
+msgstr "سپتامبر"
+
+msgid "October"
+msgstr "اکتبر"
+
+msgid "November"
+msgstr "نوامبر"
+
+msgid "December"
+msgstr "دسامبر"

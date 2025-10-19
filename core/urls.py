@@ -1,5 +1,6 @@
 from django.urls import path
 from django.contrib.auth.views import LogoutView
+from django.views.i18n import set_language
 from . import views
 
 app_name = "core"  # <--- This is important!
@@ -12,4 +13,5 @@ urlpatterns = [
     path("favorites/", views.favorites, name="favorites"),
     path("search/", views.search, name="search"),
     path("logout/", LogoutView.as_view(), name="logout"),
+    path("set-language/", set_language, name="set_language"),
 ]
