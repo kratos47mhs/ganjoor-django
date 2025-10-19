@@ -13,9 +13,13 @@ from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.sdk.metrics import MeterProvider
 from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
+from opentelemetry.sdk._logs import LoggerProvider
+from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import OTLPMetricExporter
+from opentelemetry.exporter.otlp.proto.grpc._log_exporter import OTLPLogExporter
 from opentelemetry.instrumentation.django import DjangoInstrumentor
+from opentelemetry.instrumentation.logging import LoggingInstrumentor
 from opentelemetry import trace, metrics
 
 
@@ -47,8 +51,16 @@ def init_telemetry():
     meter_provider = MeterProvider(resource=resource, metric_readers=[metric_reader])
     metrics.set_meter_provider(meter_provider)
 
+    # Initialize logs
+    log_exporter = OTLPLogExporter(endpoint=otlp_endpoint)
+    logger_provider = LoggerProvider(resource=resource)
+    logger_provider.add_log_record_processor(BatchLogRecordProcessor(log_exporter))
+
     # Instrument Django (automatically instruments many libraries)
     DjangoInstrumentor().instrument(tracer_provider=tracer_provider)
+
+    # Instrument logging to send logs to OpenTelemetry
+    LoggingInstrumentor().instrument(logger_provider=logger_provider, set_logging_format=False)
 
     # Configure Python logging with structured output
     root_logger = logging.getLogger()
@@ -63,4 +75,4 @@ def init_telemetry():
         root_logger.addHandler(console_handler)
         root_logger.setLevel(logging.INFO)
 
-    print("✅ OpenTelemetry initialized: traces and metrics enabled")
+    print("✅ OpenTelemetry initialized: traces, metrics, and logs enabled")
