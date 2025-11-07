@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "core",
+    'corsheaders',
     "rest_framework",
     "rest_framework_simplejwt",
     "django_filters",
@@ -65,6 +66,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = "ganjoor.urls"
@@ -220,6 +223,13 @@ REST_FRAMEWORK = {
     },
     "EXCEPTION_HANDLER": "core.exceptions.custom_exception_handler",
 }
+
+# Disable throttling during development
+if DEBUG:
+    if "DEFAULT_THROTTLE_CLASSES" in REST_FRAMEWORK:
+        del REST_FRAMEWORK["DEFAULT_THROTTLE_CLASSES"]
+    if "DEFAULT_THROTTLE_RATES" in REST_FRAMEWORK:
+        del REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"]
 
 # JWT Settings
 SIMPLE_JWT = {

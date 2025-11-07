@@ -101,11 +101,21 @@ class GanjoorCategoryListSerializer(serializers.ModelSerializer):
     parent_title = serializers.CharField(
         source="parent.title", read_only=True, allow_null=True
     )
+    poems_count = serializers.SerializerMethodField()
 
     class Meta:
         model = GanjoorCategory
-        fields = ["id", "title", "url", "poet", "poet_name", "parent", "parent_title"]
+        fields = ["id", "title", "url", "poet", "poet_name", "parent", "parent_title", "poems_count"]
         read_only_fields = ["id"]
+
+    def get_poems_count(self, obj):
+        """Get total number of poems in this category and all subcategories."""
+        def count_poems(category):
+            count = category.poems.count()
+            for child in category.children.all():
+                count += count_poems(child)
+            return count
+        return count_poems(obj)
 
 
 class GanjoorCategorySerializer(serializers.ModelSerializer):
@@ -116,6 +126,7 @@ class GanjoorCategorySerializer(serializers.ModelSerializer):
         source="parent.title", read_only=True, allow_null=True
     )
     children = serializers.SerializerMethodField()
+    poems = serializers.SerializerMethodField()
     poems_count = serializers.SerializerMethodField()
     breadcrumbs = serializers.SerializerMethodField()
 
@@ -130,6 +141,7 @@ class GanjoorCategorySerializer(serializers.ModelSerializer):
             "parent",
             "parent_title",
             "children",
+            "poems",
             "poems_count",
             "breadcrumbs",
         ]
@@ -140,9 +152,19 @@ class GanjoorCategorySerializer(serializers.ModelSerializer):
         children = obj.children.all()
         return GanjoorCategoryListSerializer(children, many=True).data
 
+    def get_poems(self, obj):
+        """Get poems directly in this category."""
+        poems = obj.poems.select_related("category__poet").order_by("title")
+        return GanjoorPoemListSerializer(poems, many=True, context=self.context).data
+
     def get_poems_count(self, obj):
-        """Get number of poems directly in this category."""
-        return obj.poems.count()
+        """Get total number of poems in this category and all subcategories."""
+        def count_poems(category):
+            count = category.poems.count()
+            for child in category.children.all():
+                count += count_poems(child)
+            return count
+        return count_poems(obj)
 
     def get_breadcrumbs(self, obj):
         """Get breadcrumb trail for this category."""
